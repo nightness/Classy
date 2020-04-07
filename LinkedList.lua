@@ -23,8 +23,8 @@ Classy.LinkedList = {
             end,
         },
     },
-    new = function (constructor)
-        return Classy.createInstance(Classy.LinkedList.prototype, constructor);
+    new = function (initializer)
+        return Classy.createInstance(Classy.LinkedList.prototype, initializer);
     end,
     prototype = {
         constructor = function (self)

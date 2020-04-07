@@ -2,8 +2,8 @@
 -- Classy's Stack datatype
 --
 Classy.Stack = {
-    new = function (constructor)
-        return Classy.createInstance(Classy.Stack.prototype, constructor);
+    new = function (initializer)
+        return Classy.createInstance(Classy.Stack.prototype, initializer);
     end,
     prototype = {
         constructor = function(self, ...)
@@ -29,8 +29,8 @@ Classy.Stack = {
 -- A stack that invokes callbacks, sutabile to undo actions. This stack will invoke callbacks on undo() calls.
 --
 Classy.UndoStack = {
-    new = function (constructor)
-        return Classy.createInstance(Classy.UndoStack, constructor);
+    new = function (initializer)
+        return Classy.createInstance(Classy.UndoStack, initializer);
     end,
 
     constructor = function(self, ...)

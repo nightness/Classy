@@ -1,6 +1,6 @@
 Classy.Queue = {
-    new = function (constructor)
-        return Classy.createInstance(Classy.Queue.prototype, constructor);
+    new = function (initializer)
+        return Classy.createInstance(Classy.Queue.prototype, initializer);
     end,
     prototype = {
         constructor = function(self, ...)

@@ -65,18 +65,18 @@ end
 -- This is the beast that creates instances of a table, creating the feel of a class. I know
 -- there are other ways to do this, but this way looks nice and works great. It's the core of Classy.
 --
-function Classy.createInstance(classProtoType, constructor, existingData)
+function Classy.createInstance(classProtoType, initializer, existingData)
     local object, lookup_table = _copy(classProtoType);
     if (existingData) then
         object = tableMerge(object, existingData);
     end
-    if (constructor and type(constructor) == "function") then
+    if (initializer and type(initializer) == "function") then
         if (object.constructor and type(object.constructor) == "function") then
             object:constructor(); -- base constructor
         end
-        object.constructor = constructor; -- set the constructor
+        object.constructor = initializer; -- set the constructor
     end
-    if (object.constructor) then
+    if (object.constructor and type(object.constructor) == "function") then
         object:constructor(); -- class constructor
         object.constructor = nil; -- single call only
     end

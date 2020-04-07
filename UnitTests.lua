@@ -1,4 +1,4 @@
--- Unit Tests
+-- Unit Tests, but not unit testing (It's a work in progress)... My sloppy version of testing. :P
 Classy.UnitTests = {
     Hashtable = function ()
         local hashtable = Classy.Hashtable.new();

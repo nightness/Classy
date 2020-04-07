@@ -1,6 +1,6 @@
 Classy.Hashtable = {
-    new = function (constructor)
-        return Classy.createInstance(Classy.Hashtable.prototype, constructor)
+    new = function (initializer)
+        return Classy.createInstance(Classy.Hashtable.prototype, initializer)
     end,
     prototype = {
         constructor = function(self)
@@ -41,7 +41,7 @@ Classy.Hashtable = {
         end,
         remove = function (self, key)
             if (type(key) ~= "string") then
-                error("Classy.Hashtable.put: Key argument requires a string value");
+                error("Classy.Hashtable.remove: Key argument requires a string value");
             end
             if (self._data[key] ~= nil) then
                 self._data[key] = nil

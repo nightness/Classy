@@ -1,6 +1,6 @@
 Classy.Collection = {
-    new = function (constructor)
-        return Classy.createInstance(Classy.Collection.prototype, constructor);
+    new = function (initializer)
+        return Classy.createInstance(Classy.Collection.prototype, initializer);
     end,
     prototype = {
         constructor = function (list)
