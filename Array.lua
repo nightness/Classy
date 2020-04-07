@@ -72,7 +72,6 @@ Classy.Array = {
             error("map() - Invalid handler");
         end
         -- The result needs to be the same type as self
-        local isDataSet = Classy.isClass(self, "Classy.DataSet")
         local result = Classy.getClass(Classy.getClassName(self)).new()
         -- Build the result
         for index = 1, self:length() do
