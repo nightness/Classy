@@ -1,76 +1,99 @@
 --[[
-    Each value can only exist once in these DataSets. This allows a simple remove-by-value instead of remove-by-index.
-]] --
+    Classy.DataSet is a collection that ensures each value exists only once.
+    This allows for simple removal by value instead of by index, and supports set operations.
+]]
 Classy.DataSet = {
+    -- Creates a new instance of a DataSet
     new = function(constructor, existingData)
-        return Classy.createInstance(Classy.DataSet.prototype,
-                                     constructor, existingData);
+        return Classy.createInstance(Classy.DataSet.prototype, constructor, existingData)
     end,
+
     prototype = Classy.inheritFrom(Classy.Array, {
+        -- Constructor initializes the DataSet with an empty internal data array
         constructor = function(self)
-            self._className = "Classy.DataSet";
-            self._data = {}
+            self._className = "Classy.DataSet"
+            self._data = {}  -- Internal storage for dataset values
         end,
-        -- Find the index of data
+
+        -- Finds the index of a value in the dataset
+        -- Returns the index if found, or nil if not found
         find = function(self, value)
             for i = 1, #self._data do
-                if (self._data[i] == value) then return i; end
+                if self._data[i] == value then return i end
             end
+            return nil
         end,
-        -- Add data to the data set
+
+        -- Adds a unique value to the dataset
+        -- Returns true if the value was added, or false if it already existed
         add = function(self, value)
-            local index = self:find(value);
-            if (index) then return false end-- Don't add twice
-            self._data[#self._data + 1] = value;
-            return true;
+            if self:find(value) then return false end  -- Prevent duplicate entries
+            self._data[#self._data + 1] = value
+            return true
         end,
-        -- :get(index) - Returns data values by index
+
+        -- Retrieves a value by its index
+        -- Returns the value at the specified index, or nil if the index is out of bounds
         get = function(self, index)
-            if (not index) then return nil end
+            if not index or index < 1 or index > #self._data then return nil end
             return self._data[index]
         end,
-        -- Removes data from the self._data table
+
+        -- Removes a value from the dataset
+        -- Does nothing if the value is not found
         remove = function(self, value)
-            local index = self:find(value);
-            if (not index) then return end-- Value not found
-            table.remove(self._data, index);
+            local index = self:find(value)
+            if not index then return end  -- Value not found, no action needed
+            table.remove(self._data, index)
         end,
-        -- Union set function
-        --      Return a Classy.DataSet that contians all elements that are in at least one of the two data sets
+
+        -- Performs a union operation with another dataset
+        -- Returns a new DataSet containing all unique elements from both datasets
         union = function(self, dataSet)
-            local ret = Classy.DataSet.new();
-            for i = 1, self:length() do ret:add(self._data[i]); end
-            for i = 1, dataSet:length() do ret:add(dataSet._data[i]); end
-            return ret;
+            local result = Classy.DataSet.new()
+            -- Add elements from the current dataset
+            for i = 1, self:length() do
+                result:add(self._data[i])
+            end
+            -- Add elements from the other dataset
+            for i = 1, dataSet:length() do
+                result:add(dataSet._data[i])
+            end
+            return result
         end,
-        -- Intersection set function
-        --      Return a Classy.DataSet that contians all elements that exist in both data sets
+
+        -- Performs an intersection operation with another dataset
+        -- Returns a new DataSet containing only the elements common to both datasets
         intersection = function(self, dataSet)
-            local ret = Classy.DataSet.new();
+            local result = Classy.DataSet.new()
             for i = 1, self:length() do
-                local data = self._data[i];
-                if (dataSet:find(data)) then ret:add(data); end
+                local data = self._data[i]
+                if dataSet:find(data) then
+                    result:add(data)
+                end
             end
-            for i = 1, dataSet:length() do
-                local data = dataSet._data[i];
-                if (self:find(data)) then ret:add(data); end
-            end
-            return ret;
+            return result
         end,
-        -- Symetric difference set function
-        --      Returns the set of all objects that are a member of exactly one of A and B (elements which are in one of the sets, but not in both)
+
+        -- Performs a symmetric difference operation with another dataset
+        -- Returns a new DataSet containing elements that are in either dataset but not in both
         difference = function(self, dataSet)
-            local ret = Classy.DataSet.new(); -- ToDo: class here should be self._className
+            local result = Classy.DataSet.new()
+            -- Add elements unique to the current dataset
             for i = 1, self:length() do
-                local data = self._data[i];
-                if (not dataSet:find(data)) then ret:add(data); end
+                local data = self._data[i]
+                if not dataSet:find(data) then
+                    result:add(data)
+                end
             end
+            -- Add elements unique to the other dataset
             for i = 1, dataSet:length() do
-                local data = dataSet._data[i];
-                if (not self:find(data)) then ret:add(data); end
+                local data = dataSet._data[i]
+                if not self:find(data) then
+                    result:add(data)
+                end
             end
-            return ret;
-        end
+            return result
+        end,
     })
 }
-
