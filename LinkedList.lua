@@ -36,13 +36,36 @@ Classy.LinkedList = {
         add = function (self, value)
             return self:insertAfter(nil, value);
         end,
+
         -- Returns the first node that has the specified value
         findFirst = function (self, value)
-
+            local node = self:firstNode()
+            while node do
+                if node.value == value then
+                    return node
+                end
+                node = node.nextNode
+                if node == self._firstNode then
+                    break
+                end
+            end
+            return nil
         end,
+        
         -- Returns all nodes with the specified value
-        findAll = function (self, value) 
-
+        findAll = function (self, value)
+            local nodes = {}
+            local node = self:firstNode()
+            while node do
+                if node.value == value then
+                    table.insert(nodes, node)
+                end
+                node = node.nextNode
+                if node == self._firstNode then
+                    break
+                end
+            end
+            return nodes
         end,
         firstNode = function (self)
             if (self._firstNode) then
