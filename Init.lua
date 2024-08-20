@@ -1,6 +1,6 @@
 Classy = { }
 
--- Usage: DoIt.NoOp(), could be used to send an "ignore" error handler 
+-- Usage: Classy.NoOp(), could be used to send an "ignore" error handler 
 -- Use when you want to supply a function that does nothing as an argument
 Classy.NoOp = function() end
 
@@ -22,8 +22,8 @@ local function tableMerge(t1, t2)
     return t1;
 end
 
-local function _copy(object)
-    local lookup_table = {};
+local function _copy(object, lookup_table)
+    lookup_table = lookup_table or {}
     if type(object) ~= "table" then
         return object
     elseif lookup_table[object] then
@@ -32,17 +32,20 @@ local function _copy(object)
     local new_table = {}
     lookup_table[object] = new_table
     for index, value in pairs(object) do
-        new_table[_copy(index)] = _copy(value)
+        new_table[_copy(index, lookup_table)] = _copy(value, lookup_table)
     end
-    return setmetatable(new_table, getmetatable(object)), lookup_table
+    return setmetatable(new_table, getmetatable(object))
 end
 
--- Unused atm
-local function is_iterable (val)
+-- This is used to check if a value is iterable
+function Classy.isIterable(val)
     if type(val) == 'table' then return true end
-    local mt = getmetatable(val);
-    if mt == true then return true end
-    return mt and mt.__pairs and true
+    local mt = getmetatable(val)
+    return mt and (mt.__pairs or mt.__ipairs) ~= nil
+end
+
+function Classy.clone(object)
+    return _copy(object)
 end
 
 -- This is used to copy all the objects in src to dest
