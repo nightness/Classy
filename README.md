@@ -121,7 +121,7 @@ The `Hashtable` class provides a key-value store with unique keys.
 
 ## LinkedList
 
-The `LinkedList` class implements a circular doubly-linked list.
+The `LinkedList` class implements a doubly-linked list.
 
 ### Instance Methods
 - `add(self, value)` - Adds a new node with the specified value.
