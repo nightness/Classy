@@ -1,7 +1,11 @@
 Classy.Queue = {
     -- Creates a new Queue instance
     new = function(initializer)
-        return Classy.createInstance(Classy.Queue.prototype, initializer)
+        local instance = Classy.createInstance(Classy.Queue.prototype)
+        if initializer then
+            initializer(instance)
+        end
+        return instance
     end,
 
     prototype = {
@@ -13,7 +17,7 @@ Classy.Queue = {
 
         -- Adds an element to the queue (enqueue)
         enqueue = function(self, arg)
-            self._collection:pushleft(arg)  -- Add element to the front of the queue
+            self._collection:pushright(arg)  -- Add element to the end of the queue
         end,
 
         -- Removes and returns the next element from the queue (dequeue)
@@ -21,7 +25,7 @@ Classy.Queue = {
             if self:isEmpty() then
                 error("Classy.Queue: dequeue from an empty queue")  -- Error handling for empty queue
             end
-            return self._collection:popright()  -- Remove element from the back of the queue
+            return self._collection:popleft()  -- Remove element from the front of the queue
         end,
 
         -- Checks if the queue is empty
@@ -39,7 +43,7 @@ Classy.Queue = {
             if self:isEmpty() then
                 return nil  -- Return nil if the queue is empty
             end
-            return self._collection:get(self._collection.first)  -- Return the element at the back of the queue
+            return self._collection:get(self._collection.first)  -- Return the element at the front of the queue
         end,
     },
 }

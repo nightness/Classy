@@ -83,7 +83,7 @@ Classy.Array = {
                 table.insert(t, list:get(index))
             end
             -- Invoke handler and and return value to the result list
-            result:add(handler(unpack(t)));
+            result:add(handler(Classy.unpack(t)));
         end
         return result;
     end

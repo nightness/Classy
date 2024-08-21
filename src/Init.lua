@@ -117,10 +117,10 @@ function Classy.getClass(className)
         return nil;
     end
     if (not className:match(".")) then
-        return getglobal(className);
+        return _G[className];
     end
     local split = split_str(className, ".")
-    local result= getglobal(split[1]);
+    local result = _G[split[1]];
     for i = 2, #split do
         result = result[split[i]];
     end
@@ -132,3 +132,12 @@ function Classy.getClassName(object)
         return object._className;
     end
 end
+
+function Classy.unpack(t, i, n)
+    i = i or 1
+    n = n or #t
+    if i <= n then
+        return t[i], Classy.unpack(t, i + 1, n)
+    end
+end
+
