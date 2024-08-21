@@ -15,6 +15,7 @@ Welcome to the Classy Library! This library provides a collection of data struct
 - [Queue](#queue)
 - [Stack](#stack)
 - [Tree](#tree)
+- [Vector](#vector)
 
 ---
 
@@ -162,61 +163,6 @@ The `Matrix` class provides operations for working with matrices, including addi
 
 ---
 
-## Vector
-
-The `Vector` class represents a mathematical vector and provides methods for common vector operations such as addition, subtraction, dot product, scalar multiplication, and normalization.
-
-### Instance Methods
-
-- `dimension(self)`: Returns the dimension (length) of the vector.
-- `add(self, other)`: Adds another vector to this vector. The vectors must have the same dimension.
-- `subtract(self, other)`: Subtracts another vector from this vector. The vectors must have the same dimension.
-- `multiplyByScalar(self, scalar)`: Multiplies this vector by a scalar value.
-- `dotProduct(self, other)`: Computes the dot product of this vector and another vector. The vectors must have the same dimension.
-- `magnitude(self)`: Computes the magnitude (length) of the vector.
-- `normalize(self)`: Normalizes the vector, making it a unit vector (a vector with a magnitude of 1).
-- `getElement(self, index)`: Retrieves the value at a specific index.
-- `toString(self)`: Converts the vector to a string for easy printing and debugging.
-
-### Example Usage
-
-```lua
--- Create two vectors
-local vec1 = Classy.Vector.new(function(self)
-    self:addElement(1)
-    self:addElement(2)
-    self:addElement(3)
-end)
-
-local vec2 = Classy.Vector.new(function(self)
-    self:addElement(4)
-    self:addElement(5)
-    self:addElement(6)
-end)
-
--- Add the vectors
-local sum = vec1:add(vec2)
-print("Sum: " .. sum:toString())  -- Output: Sum: {5, 7, 9}
-
--- Subtract the vectors
-local difference = vec1:subtract(vec2)
-print("Difference: " .. difference:toString())  -- Output: Difference: {-3, -3, -3}
-
--- Dot product of the vectors
-local dot = vec1:dotProduct(vec2)
-print("Dot Product: " .. dot)  -- Output: Dot Product: 32
-
--- Magnitude of a vector
-local magnitude = vec1:magnitude()
-print("Magnitude of vec1: " .. magnitude)  -- Output: Magnitude of vec1: 3.7416573867739
-
--- Normalize the vector
-local normalizedVec = vec1:normalize()
-print("Normalized vec1: " .. normalizedVec:toString())  -- Output: Normalized vec1: {0.26726124191242, 0.53452248382485, 0.80178372573727}
-```
-
----
-
 ## Observable
 
 The `Observable` class allows for observing changes to a value, notifying subscribed listeners when the value changes.
@@ -273,6 +219,61 @@ The `Tree` class represents a tree structure where each node can have multiple c
 - `delete(self, child)` - Deletes a child node from the current node.
 - `getValue(self)` - Returns the value of the node.
 - `setValue(self, value)` - Sets a new value for the node.
+
+---
+
+## Vector
+
+The `Vector` class represents a mathematical vector and provides methods for common vector operations such as addition, subtraction, dot product, scalar multiplication, and normalization.
+
+### Instance Methods
+
+- `dimension(self)`: Returns the dimension (length) of the vector.
+- `add(self, other)`: Adds another vector to this vector. The vectors must have the same dimension.
+- `subtract(self, other)`: Subtracts another vector from this vector. The vectors must have the same dimension.
+- `multiplyByScalar(self, scalar)`: Multiplies this vector by a scalar value.
+- `dotProduct(self, other)`: Computes the dot product of this vector and another vector. The vectors must have the same dimension.
+- `magnitude(self)`: Computes the magnitude (length) of the vector.
+- `normalize(self)`: Normalizes the vector, making it a unit vector (a vector with a magnitude of 1).
+- `getElement(self, index)`: Retrieves the value at a specific index.
+- `toString(self)`: Converts the vector to a string for easy printing and debugging.
+
+### Example Usage
+
+```lua
+-- Create two vectors
+local vec1 = Classy.Vector.new(function(self)
+    self:addElement(1)
+    self:addElement(2)
+    self:addElement(3)
+end)
+
+local vec2 = Classy.Vector.new(function(self)
+    self:addElement(4)
+    self:addElement(5)
+    self:addElement(6)
+end)
+
+-- Add the vectors
+local sum = vec1:add(vec2)
+print("Sum: " .. sum:toString())  -- Output: Sum: {5, 7, 9}
+
+-- Subtract the vectors
+local difference = vec1:subtract(vec2)
+print("Difference: " .. difference:toString())  -- Output: Difference: {-3, -3, -3}
+
+-- Dot product of the vectors
+local dot = vec1:dotProduct(vec2)
+print("Dot Product: " .. dot)  -- Output: Dot Product: 32
+
+-- Magnitude of a vector
+local magnitude = vec1:magnitude()
+print("Magnitude of vec1: " .. magnitude)  -- Output: Magnitude of vec1: 3.7416573867739
+
+-- Normalize the vector
+local normalizedVec = vec1:normalize()
+print("Normalized vec1: " .. normalizedVec:toString())  -- Output: Normalized vec1: {0.26726124191242, 0.53452248382485, 0.80178372573727}
+```
 
 ---
 
