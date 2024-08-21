@@ -306,4 +306,42 @@ Classy.UnitTests = {
         -- Change the Observable's value again and notify remaining observers
         ob:set("Bye")
     end,
+    Vector = function()
+        -- Create two vectors
+        local vec1 = Classy.Vector.new(function(self)
+            self:addElement(1)
+            self:addElement(2)
+            self:addElement(3)
+        end)
+    
+        local vec2 = Classy.Vector.new(function(self)
+            self:addElement(4)
+            self:addElement(5)
+            self:addElement(6)
+        end)
+    
+        -- Test addition
+        local sum = vec1:add(vec2)
+        assert(sum:getElement(1) == 5 and sum:getElement(2) == 7 and sum:getElement(3) == 9, "Vector addition failed")
+    
+        -- Test subtraction
+        local difference = vec1:subtract(vec2)
+        assert(difference:getElement(1) == -3 and difference:getElement(2) == -3 and difference:getElement(3) == -3, "Vector subtraction failed")
+    
+        -- Test dot product
+        local dot = vec1:dotProduct(vec2)
+        assert(dot == 32, "Vector dot product failed")
+    
+        -- Test magnitude
+        local magnitude = vec1:magnitude()
+        assert(math.abs(magnitude - 3.7416573867739) < 1e-10, "Vector magnitude calculation failed")
+    
+        -- Test normalization
+        local normalizedVec = vec1:normalize()
+        assert(math.abs(normalizedVec:getElement(1) - 0.26726124191242) < 1e-10, "Vector normalization failed")
+        assert(math.abs(normalizedVec:getElement(2) - 0.53452248382485) < 1e-10, "Vector normalization failed")
+        assert(math.abs(normalizedVec:getElement(3) - 0.80178372573727) < 1e-10, "Vector normalization failed")
+    
+        print("All Vector tests passed!")
+    end,    
 }
