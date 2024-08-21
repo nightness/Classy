@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# This script is used to bundle the source code into a single lua file
-# for distribution. It is not used in the normal operation of the
-# program.
+# Output a bundle of all the source files, should be run from the project's root directory
 
 # The output file
 OUTFILE=out/classy.bundle.lua
