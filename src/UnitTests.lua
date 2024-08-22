@@ -183,7 +183,7 @@ Classy.UnitTests = {
             print("Matrix Unit Test Passed: All checks are successful!")
         else
             print("Matrix Unit Test Failed: Some checks did not pass.")
-        end        
+        end
     end,
 
     -- Tests the basic functionality of the DataSet class
@@ -197,15 +197,28 @@ Classy.UnitTests = {
         dataSet:add(7)
 
         -- Assertions for DataSet contents
-        assertEqual(dataSet:get(1), 5, "DataSet first entry should be 5")
-        assertEqual(dataSet:get(2), 6, "DataSet second entry should be 6")
-        assertEqual(dataSet:get(3), 7, "DataSet third entry should be 7")
+        success = success and assertEqual(dataSet:get(1), 5, "DataSet first entry should be 5")
+        success = success and assertEqual(dataSet:get(2), 6, "DataSet second entry should be 6")
+        success = success and assertEqual(dataSet:get(3), 7, "DataSet third entry should be 7")
+
+        -- Clear the dataset and check for empty entries
+        dataSet:clear()
+        success = success and assertEqual(dataSet:get(1), nil, "DataSet first entry should be nil after clear")
+        success = success and assertEqual(dataSet:get(2), nil, "DataSet second entry should be nil after clear")
+        success = success and assertEqual(dataSet:get(3), nil, "DataSet third entry should be nil after clear")
+
+        -- Final result report
+        if success then
+            print("DataSet Unit Test Passed: All checks are successful!")
+        else
+            print("DataSet Unit Test Failed: Some checks did not pass.")
+        end
     end,
 
     -- Tests the map function of the List class
     ListMap = function()
         local success = true
-        
+
         -- Creating and populating lists
         local list1 = Classy.List.new()
         list1:add(1)
@@ -261,8 +274,9 @@ Classy.UnitTests = {
         -- Assertions for sorted DataSet
         local expectedOrder = {4, 6, 9, 16, 21, 23, 70, 91}
         for i, expectedValue in ipairs(expectedOrder) do
-            success = success and assertEqual(dataSet:get(i), expectedValue,
-                "DataSetSort entry at index " .. i .. " should be " .. expectedValue)
+            success = success and
+                          assertEqual(dataSet:get(i), expectedValue,
+                    "DataSetSort entry at index " .. i .. " should be " .. expectedValue)
         end
 
         -- Final result report
@@ -287,11 +301,13 @@ Classy.UnitTests = {
         local copy = dataSet:copy()
 
         -- Assert that the original and the clone are equal
-        success = success and assert(dataSet:equals(copy), "DataSetClone: Cloned dataset should be equal to the original")
+        success = success and
+                      assert(dataSet:equals(copy), "DataSetClone: Cloned dataset should be equal to the original")
 
         -- Modify the clone and check for inequality
         copy:add(8)
-        success = success and assert(not dataSet:equals(copy), "DataSetClone: Modified clone should not be equal to original")
+        success = success and
+                      assert(not dataSet:equals(copy), "DataSetClone: Modified clone should not be equal to original")
 
         -- Final result report
         if success then
@@ -322,7 +338,8 @@ Classy.UnitTests = {
 
         -- Assert equality between datasets
         success = success and assert(dataSetA:equals(dataSetB), "DataSetEquals: Datasets A and B should be equal")
-        success = success and assert(not dataSetA:equals(dataSetC), "DataSetEquals: Datasets A and C should not be equal")
+        success = success and
+                      assert(not dataSetA:equals(dataSetC), "DataSetEquals: Datasets A and C should not be equal")
 
         -- Final result report
         if success then
@@ -352,8 +369,9 @@ Classy.UnitTests = {
         -- Assertions for DataSet difference
         local expectedDifference = {5, 7}
         for i, expectedValue in ipairs(expectedDifference) do
-            success = success and assertEqual(results:get(i), expectedValue,
-                "DataSetDifference entry at index " .. i .. " should be " .. expectedValue)
+            success = success and
+                          assertEqual(results:get(i), expectedValue,
+                    "DataSetDifference entry at index " .. i .. " should be " .. expectedValue)
         end
 
         -- Final result report
@@ -384,8 +402,9 @@ Classy.UnitTests = {
         -- Assertions for DataSet intersection
         local expectedIntersection = {5, 7}
         for i, expectedValue in ipairs(expectedIntersection) do
-            success = success and assertEqual(results:get(i), expectedValue,
-                "DataSetIntersection entry at index " .. i .. " should be " .. expectedValue)
+            success = success and
+                          assertEqual(results:get(i), expectedValue,
+                    "DataSetIntersection entry at index " .. i .. " should be " .. expectedValue)
         end
 
         -- Final result report
@@ -416,8 +435,9 @@ Classy.UnitTests = {
         -- Assertions for DataSet union
         local expectedUnion = {5, 6, 7, 1, 9}
         for i, expectedValue in ipairs(expectedUnion) do
-            success = success and assertEqual(results:get(i), expectedValue,
-                "DataSetUnion entry at index " .. i .. " should be " .. expectedValue)
+            success = success and
+                          assertEqual(results:get(i), expectedValue,
+                    "DataSetUnion entry at index " .. i .. " should be " .. expectedValue)
         end
 
         -- Final result report
@@ -466,7 +486,8 @@ Classy.UnitTests = {
         -- Verify list after removal
         success = success and assertEqual(ll:first(), "This", "First node should still be 'This' after removal")
         success = success and assertEqual(ll:next(), "a", "Second node should now be 'a' after removal of 'is'")
-        success = success and assertEqual(ll:next(), "test.", "Third node should still be 'test.' after removal of 'is'")
+        success = success and
+                      assertEqual(ll:next(), "test.", "Third node should still be 'test.' after removal of 'is'")
         success = success and assertEqual(ll:next(), nil, "There should be no more nodes after 'test.', expected nil")
 
         -- Final result report
@@ -567,8 +588,9 @@ Classy.UnitTests = {
         local expectedNotifications = {"Function #1 - Test", "Function #2 - Test", "Function #3 - Test",
                                        "Function #1 - Bye", "Function #3 - Bye"}
         for i, expectedValue in ipairs(expectedNotifications) do
-            success = success and assertEqual(observedValues[i], expectedValue,
-                "Observable notification " .. i .. " should be '" .. expectedValue .. "'")
+            success = success and
+                          assertEqual(observedValues[i], expectedValue,
+                    "Observable notification " .. i .. " should be '" .. expectedValue .. "'")
         end
 
         -- Final result report
@@ -605,7 +627,8 @@ Classy.UnitTests = {
         -- Test subtraction
         local difference = vec1:subtract(vec2)
         success = success and assertEqual(difference:getElement(1), -3, "Vector subtraction first element should be -3")
-        success = success and assertEqual(difference:getElement(2), -3, "Vector subtraction second element should be -3")
+        success = success and
+                      assertEqual(difference:getElement(2), -3, "Vector subtraction second element should be -3")
         success = success and assertEqual(difference:getElement(3), -3, "Vector subtraction third element should be -3")
 
         -- Test dot product
@@ -614,8 +637,9 @@ Classy.UnitTests = {
 
         -- Test magnitude
         local magnitude = vec1:magnitude()
-        success = success and assert(math.abs(magnitude - 3.7416573867739) < 1e-10,
-            "Vector magnitude calculation should be close to 3.7416573867739")
+        success = success and
+                      assert(math.abs(magnitude - 3.7416573867739) < 1e-10,
+                "Vector magnitude calculation should be close to 3.7416573867739")
 
         -- Test normalization
         local normalizedVec = vec1:normalize()
@@ -637,11 +661,11 @@ Classy.UnitTests = {
         local success = true
 
         -- Create a new instance of the Test class
-        print("\nTesting Classy Library with a custom class from an abstract class...")
         local test = Classy.Test.new(function(self)
             self:set(1, "Hello, World!")
         end)
-        success = success and assertEqual(test:get(1), "Hello, World!", "Test class should store and retrieve data correctly")
+        success = success and
+                      assertEqual(test:get(1), "Hello, World!", "Test class should store and retrieve data correctly")
 
         -- Final result report
         if success then
@@ -650,6 +674,42 @@ Classy.UnitTests = {
             print("TestClass Unit Test Failed: Some checks did not pass.")
         end
     end,
+    ExampleClass = function()
+        local Example = Classy.Class({
+            constructor = function(self)
+                self._className = "Example"
+                self._data = {}
+            end,
+            add = function(self, value)
+                table.insert(self._data, value)
+            end,
+            get = function(self, index)
+                return self._data[index]
+            end,
+            set = function(self, index, value)
+                self._data[index] = value
+            end,
+            clear = function(self)
+                self._data = {}
+            end
+        })
+
+        local example = Example.new()
+        example:add("Hello")
+        example:add("World")
+        example:add("!")
+
+        local success = true
+        success = success and assertEqual(example:get(1), "Hello", "Example class should store and retrieve data correctly")
+        success = success and assertEqual(example:get(2), "World", "Example class should store and retrieve data correctly")
+        success = success and assertEqual(example:get(3), "!", "Example class should store and retrieve data correctly")
+
+        if success then
+            print("ExampleClass Unit Test Passed: All checks are successful!")
+        else
+            print("ExampleClass Unit Test Failed: Some checks did not pass.")
+        end
+    end
 }
 
 -- Test Runner Function
@@ -662,7 +722,7 @@ function runUnitTests()
         print("\nRunning Test: " .. testName)
         local success, err = pcall(testFunc)
         if success then
-            print(testName .. " Passed")
+            -- print(testName .. " Passed")
         else
             failures = failures + 1
             print(testName .. " Failed: " .. tostring(err))
