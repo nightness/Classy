@@ -8,9 +8,15 @@ LUA_SRC_DIR = lua-$(LUA_VERSION)
 OUT_DIR = out
 OUTFILE = $(OUT_DIR)/classy.bundle.lua
 OUTFILE_TESTS = $(OUT_DIR)/classy.bundle.tests.lua
+OUTFILE_NEURAL = $(OUT_DIR)/neural-network.lua
 FILES = src/Init.lua src/Array.lua src/BinaryTree.lua src/Collection.lua src/DataSet.lua src/Field.lua src/Hashtable.lua src/List.lua src/LinkedList.lua src/Math.lua src/Matrix.lua src/Observable.lua src/Queue.lua src/Stack.lua src/Tree.lua src/Vector.lua
 UNIT_TESTS = src/UnitTests.lua
+NEURAL_NETWORK = src/NeuralNetwork/NeuralNetwork.lua
 LUA_BINARY = lua
+
+# Default target
+.PHONY: default
+default: bundle bundle-with-tests bundle-neural
 
 # Target to bundle all source files into a single Lua file without tests
 .PHONY: bundle
@@ -22,7 +28,7 @@ bundle:
 		cat $$file >> $(OUTFILE); \
 		echo "\n\n" >> $(OUTFILE); \
 	done
-	@echo "Bundling complete."
+	@echo "Bundling complete.\n"
 
 # Target to bundle all source files into a single Lua file with tests
 .PHONY: bundle-with-tests
@@ -31,7 +37,6 @@ bundle-with-tests:
 	mkdir -p $(OUT_DIR)
 	> $(OUTFILE_TESTS)
 	for file in $(FILES); do \
-		echo "Processing $$file..."; \
 		cat $$file >> $(OUTFILE_TESTS); \
 		echo "\n\n" >> $(OUTFILE_TESTS); \
 	done
@@ -39,11 +44,15 @@ bundle-with-tests:
 	echo "Appending UnitTests.lua..."
 	cat $(UNIT_TESTS) >> $(OUTFILE_TESTS)
 	echo "\n\n" >> $(OUTFILE_TESTS)
-	@echo "Bundling with UnitTests.lua complete."
+	@echo "Bundling with UnitTests.lua complete.\n"
 
-# First target: Perform both Lua installation and bundling
-.PHONY: all
-all: $(LUA_BINARY) bundle bundle-with-tests
+# Target to bundle all source files with NeuralNetwork.lua
+.PHONY: bundle-neural
+bundle-neural: bundle
+	@echo "Bundling source files and NeuralNetwork.lua into $(OUTFILE_NEURAL)..."
+	cp $(OUTFILE) $(OUTFILE_NEURAL)
+	cat $(NEURAL_NETWORK) >> $(OUTFILE_NEURAL)
+	@echo "Bundling of NeuralNetwork.lua complete.\n"
 
 # Target to build Lua only if the binary doesn't exist
 $(LUA_BINARY):
@@ -56,6 +65,10 @@ $(LUA_BINARY):
 	else \
 		echo "Lua binary already exists, skipping build."; \
 	fi
+
+# Perform both Lua installation and bundling
+.PHONY: all
+all: $(LUA_BINARY) bundle bundle-with-tests
 
 # Target to clean up Lua source directory and binary
 .PHONY: clean-lua
