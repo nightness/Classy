@@ -7,13 +7,14 @@ LUA_URL = https://www.lua.org/ftp/$(LUA_TAR)
 LUA_SRC_DIR = lua-$(LUA_VERSION)
 OUT_DIR = out
 OUTFILE = $(OUT_DIR)/classy.bundle.lua
+OUTFILE_TESTS = $(OUT_DIR)/classy.bundle.tests.lua
 FILES = src/Init.lua src/Array.lua src/BinaryTree.lua src/Collection.lua src/DataSet.lua src/Field.lua src/Hashtable.lua src/List.lua src/LinkedList.lua src/Math.lua src/Matrix.lua src/Observable.lua src/Queue.lua src/Stack.lua src/Tree.lua src/Vector.lua
+UNIT_TESTS = src/UnitTests.lua
 LUA_BINARY = lua
 
-# Target to perform both Lua installation and bundling
+# First target: Perform both Lua installation and bundling
 .PHONY: all
-all: $(LUA_BINARY)
-	@$(MAKE) bundle
+all: $(LUA_BINARY) bundle bundle-with-tests
 
 # Target to build Lua only if the binary doesn't exist
 $(LUA_BINARY):
@@ -27,12 +28,7 @@ $(LUA_BINARY):
 		echo "Lua binary already exists, skipping build."; \
 	fi
 
-# Target to clean up Lua source directory and binary
-.PHONY: clean-lua
-clean-lua:
-	rm -rf $(LUA_SRC_DIR) $(LUA_BINARY)
-
-# Target to bundle all source files into a single Lua file
+# Target to bundle all source files into a single Lua file without tests
 .PHONY: bundle
 bundle:
 	@echo "Bundling source files into $(OUTFILE)..."
@@ -44,6 +40,28 @@ bundle:
 		echo "\n\n" >> $(OUTFILE); \
 	done
 	@echo "Bundling complete."
+
+# Target to bundle all source files into a single Lua file with tests
+.PHONY: bundle-with-tests
+bundle-with-tests:
+	@echo "Bundling source files and UnitTests.lua into $(OUTFILE_TESTS)..."
+	mkdir -p $(OUT_DIR)
+	> $(OUTFILE_TESTS)
+	for file in $(FILES); do \
+		echo "Processing $$file..."; \
+		cat $$file >> $(OUTFILE_TESTS); \
+		echo "\n\n" >> $(OUTFILE_TESTS); \
+	done
+	# Append UnitTests.lua
+	echo "Appending UnitTests.lua..."
+	cat $(UNIT_TESTS) >> $(OUTFILE_TESTS)
+	echo "\n\n" >> $(OUTFILE_TESTS)
+	@echo "Bundling with UnitTests.lua complete."
+
+# Target to clean up Lua source directory and binary
+.PHONY: clean-lua
+clean-lua:
+	rm -rf $(LUA_SRC_DIR) $(LUA_BINARY)
 
 # Target to clean up the output directory
 .PHONY: clean
