@@ -141,3 +141,12 @@ function Classy.unpack(t, i, n)
     end
 end
 
+-- Constructor for a class
+function Classy.Class(proto)
+    local class = { }
+    class.prototype = proto
+    class.new = function(initializer, existingData)
+        return Classy.createInstance(class.prototype, initializer, existingData)
+    end
+    return class
+end
