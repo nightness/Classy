@@ -1,8 +1,67 @@
 # Classy Library Documentation
 
-Welcome to the Classy Library! This library provides a collection of data structures and utilities, implemented in Lua, to facilitate complex programming tasks. Below, you'll find detailed documentation on each class, including its instance methods and class-level "static" methods.
+Classy library provides a class like interface and collection of data structure classes and utilities, implemented in Lua, to facilitate complex programming tasks. Below, you'll find detailed documentation on each class, including its instance methods and class-level "static" methods.
 
-## Table of Contents
+## Setup
+
+### Using the Makefile
+
+This section provides a concise guide to using the Makefile to build and bundle the Lua Classy Library.
+
+#### Prerequisites
+
+- **GNU Make** and **Curl** should be installed on your system.
+
+### Makefile Overview
+
+The Makefile automates:
+- **Building the Lua interpreter** from source.
+- **Creating two bundled Lua files**:
+  - `classy.bundle.lua` (without `UnitTests.lua`).
+  - `classy.bundle.tests.lua` (with `UnitTests.lua` appended).
+- **Cleaning up** build artifacts and bundled files.
+
+### Targets
+
+#### `all`
+
+**Default target**: Builds Lua (if needed) and creates both bundles.
+
+- **Usage**: `make` or `make all`
+
+#### `bundle`
+
+Creates `classy.bundle.lua` by bundling all source files without `UnitTests.lua`.
+
+- **Usage**: `make bundle`
+
+#### `bundle-with-tests`
+
+Creates `classy.bundle.tests.lua` by bundling all source files with `UnitTests.lua` appended.
+
+- **Usage**: `make bundle-with-tests`
+
+#### `clean-lua`
+
+Removes the Lua binary and source directory.
+
+- **Usage**: `make clean-lua`
+
+#### `clean`
+
+Removes the output directory and bundled files.
+
+- **Usage**: `make clean`
+
+### Usage Summary
+
+1. **Build Lua and create both bundles**: Run `make` or `make all`.
+2. **Bundle without tests**: Run `make bundle`.
+3. **Bundle with tests**: Run `make bundle-with-tests`.
+4. **Clean Lua build**: Run `make clean-lua`.
+5. **Clean bundled files**: Run `make clean`.
+
+## Classes
 - [Array](#array)
 - [BinaryTree](#binarytree)
 - [Collection](#collection)
