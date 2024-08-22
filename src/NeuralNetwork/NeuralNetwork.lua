@@ -1,6 +1,7 @@
 Classy = Classy or {}
 Classy.NeuralNetwork = Classy.NeuralNetwork or {}
 
+-- Neuron class
 Classy.NeuralNetwork.Neuron = {
     new = function(constructor, existingData)
         return Classy.createInstance(Classy.NeuralNetwork.Neuron.prototype, constructor, existingData)
@@ -11,24 +12,24 @@ Classy.NeuralNetwork.Neuron = {
             self._className = "Classy.NeuralNetwork.Neuron"
             self._inputs = {}
             self._weights = {}
-            self._bias = math.random()
+            self._bias = math.random() * 0.1 - 0.05 -- Initialize bias with small random value
             self._output = 0
         end,
 
         addConnection = function(self, neuron)
             table.insert(self._inputs, neuron)
-            table.insert(self._weights, math.random())
+            table.insert(self._weights, math.random() * 0.1 - 0.05) -- Initialize weight with small random value
         end,
 
         activate = function(self, inputs)
             local sum = self._bias
             for i, input in ipairs(inputs) do
                 if not self._weights[i] then
-                    self._weights[i] = math.random()
+                    self._weights[i] = math.random() * 0.1 - 0.05 -- Initialize weight if missing
                 end
                 sum = sum + input * self._weights[i]
             end
-            self._output = 1 / (1 + math.exp(-sum))
+            self._output = 1 / (1 + math.exp(-sum)) -- Sigmoid activation function
             return self._output
         end,
 
@@ -36,13 +37,12 @@ Classy.NeuralNetwork.Neuron = {
             if error == nil then
                 error("adjustWeights: Error is nil!")
             end
-        
-            local learningRate = 0.01
+
+            local learningRate = 0.1 -- Increased learning rate
             for i, input in ipairs(self._inputs) do
                 if not self._weights[i] then
-                    self._weights[i] = math.random()
+                    self._weights[i] = math.random() * 0.1 - 0.05
                 end
-                print("Adjusting weight:", self._weights[i], "Error:", error, "Input:", input:getOutput())
                 self._weights[i] = self._weights[i] + learningRate * error * input:getOutput()
             end
             self._bias = self._bias + learningRate * error
@@ -58,6 +58,7 @@ Classy.NeuralNetwork.Neuron = {
     }
 }
 
+-- Layer class
 Classy.NeuralNetwork.Layer = {
     new = function(neuronCount, existingData)
         return Classy.createInstance(Classy.NeuralNetwork.Layer.prototype, function(self)
@@ -71,7 +72,6 @@ Classy.NeuralNetwork.Layer = {
     join = function(inputLayer, outputLayer)
         print("Joining layers...")
         for _, inputNeuron in ipairs(inputLayer._neurons) do
-            print("Joining neuron...")
             for _, outputNeuron in ipairs(outputLayer._neurons) do
                 inputNeuron:addConnection(outputNeuron)
             end
@@ -89,7 +89,7 @@ Classy.NeuralNetwork.Layer = {
         end,
 
         forwardPropagate = function(self, inputs)
-            print("Forward propagating...")
+            -- print("Forward propagating...")
             local outputs = {}
             for _, neuron in ipairs(self._neurons) do
                 table.insert(outputs, neuron:activate(inputs))
@@ -98,21 +98,22 @@ Classy.NeuralNetwork.Layer = {
         end,
 
         backwardPropagate = function(self, errors)
-            print("Backward propagating... Errors size:", #errors, "Neurons size:", #self._neurons)
+            -- print("Backward propagating... Errors size:", #errors, "Neurons size:", #self._neurons)
             local nextErrors = {}
-            
+
             for i, neuron in ipairs(self._neurons) do
-                print("Processing neuron ", i)
-                local err = errors[i] or 0  -- Default to 0 if no error provided for this neuron
+                -- print("Processing neuron ", i)
+                local err = errors[i] or 0 -- Default to 0 if no error provided for this neuron
                 neuron:adjustWeights(err)
                 table.insert(nextErrors, neuron:computeDelta())
             end
-            
+
             return nextErrors
         end
     }
 }
 
+-- NeuralNetwork class
 Classy.NeuralNetwork.new = function(constructor, existingData)
     return Classy.createInstance(Classy.NeuralNetwork.prototype, constructor, existingData)
 end
@@ -194,6 +195,56 @@ Classy.NeuralNetwork.prototype = {
     end
 }
 
+-- XOR test function
+function xorTest()
+    local trainingData = {{{0, 0}, {0}}, {{0, 1}, {1}}, {{1, 0}, {1}}, {{1, 1}, {0}}}
+
+    print("Creating neural network for XOR test...")
+    local nn = Classy.NeuralNetwork.create(2, 1, {3, 3})
+    print("Neural network created.")
+
+    local epochs = 10000
+    for epoch = 1, epochs do
+        local totalError = 0
+        for _, data in ipairs(trainingData) do
+            local inputs, expectedOutput = data[1], data[2]
+            -- print("Forward propagating with inputs:", table.concat(inputs, ", "))
+            nn:forwardPropagate(inputs)
+            local outputs = nn:getOutputs()
+            -- print("Debug: Outputs = ", outputs[1], " Expected Output = ", expectedOutput[1])
+            if outputs[1] == nil then
+                error("outputs[1] is nil. Check forward propagation.")
+            end
+            local error = expectedOutput[1] - outputs[1]
+            totalError = totalError + math.abs(error)
+            nn:backwardPropagate(expectedOutput)
+        end
+        if epoch % 1000 == 0 then
+            print("Epoch:", epoch, "Total Error:", totalError)
+        end
+    end
+
+    local passedTests = true
+    for _, data in ipairs(trainingData) do
+        local inputs, expectedOutput = data[1], data[2]
+        nn:forwardPropagate(inputs)
+        local output = nn:getOutputs()[1]
+        print("Test with inputs:", table.concat(inputs, ", "), " produced output:", output, "Expected:",
+            expectedOutput[1])
+        if math.abs(output - expectedOutput[1]) > 0.1 then
+            passedTests = false
+        end
+    end
+
+    if passedTests then
+        print("All XOR tests passed!")
+    else
+        print("Some XOR tests failed.")
+    end
+end
+
+xorTest()
+
 function testNeuralNetwork()
     print("Creating neural network...")
     local nn = Classy.NeuralNetwork.create(2, 1, {2})    
@@ -204,4 +255,5 @@ function testNeuralNetwork()
     print("Output: " .. nn:getOutputs()[1])
 end
 
-testNeuralNetwork()
+-- testNeuralNetwork()
+
