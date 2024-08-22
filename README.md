@@ -23,11 +23,17 @@ The Makefile automates:
 
 ### Targets
 
+#### `default`
+
+Builds all bundles.
+
+- **Usage**: `make`
+
 #### `all`
 
-**Default target**: Builds Lua (if needed) and creates both bundles.
+Builds all bundles and Lua.
 
-- **Usage**: `make` or `make all`
+- **Usage**: `make all`
 
 #### `bundle`
 
@@ -40,6 +46,13 @@ Creates `classy.bundle.lua` by bundling all source files without `UnitTests.lua`
 Creates `classy.bundle.tests.lua` by bundling all source files with `UnitTests.lua` appended.
 
 - **Usage**: `make bundle-with-tests`
+
+#### `bundle-neural`
+
+Creates `neural-network.lua` by bundling `classy.bundle.lua` with `src/NeuralNetwork/NeuralNetwork.lua`.
+
+- **Usage**: `make bundle-neural`
+
 
 #### `clean-lua`
 
@@ -62,11 +75,11 @@ Cleans both the bundled files and lua binary.
 
 ### Usage Summary
 
-1. **Build Lua and create both bundles**: Run `make` or `make all`.
-2. **Bundle without tests**: Run `make bundle`.
-3. **Bundle with tests**: Run `make bundle-with-tests`.
-4. **Clean Lua build**: Run `make clean-lua`.
-5. **Clean bundled files**: Run `make clean`.
+1. **Build all bundles**: Run `make`.
+2. **Build Lua**: Run `make lua`.
+3. **Build Lua and all bundles**: Run `make all`.
+4. **Clean bundled files**: Run `make clean`.
+5. **Clean Lua build**: Run `make clean-lua`.
 6. **Clean all files**: Run `make clean-all`.
 
 ## Classes
