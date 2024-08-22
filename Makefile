@@ -12,22 +12,6 @@ FILES = src/Init.lua src/Array.lua src/BinaryTree.lua src/Collection.lua src/Dat
 UNIT_TESTS = src/UnitTests.lua
 LUA_BINARY = lua
 
-# First target: Perform both Lua installation and bundling
-.PHONY: all
-all: $(LUA_BINARY) bundle bundle-with-tests
-
-# Target to build Lua only if the binary doesn't exist
-$(LUA_BINARY):
-	@if [ ! -f $(LUA_BINARY) ]; then \
-		echo "Building Lua from source..."; \
-		curl -L $(LUA_URL) | tar -xz; \
-		cd $(LUA_SRC_DIR) && make all test && cp src/lua ../$(LUA_BINARY); \
-		cd .. && rm -rf $(LUA_SRC_DIR); \
-		echo "Lua binary is ready."; \
-	else \
-		echo "Lua binary already exists, skipping build."; \
-	fi
-
 # Target to bundle all source files into a single Lua file without tests
 .PHONY: bundle
 bundle:
@@ -35,7 +19,6 @@ bundle:
 	mkdir -p $(OUT_DIR)
 	> $(OUTFILE)
 	for file in $(FILES); do \
-		echo "Processing $$file..."; \
 		cat $$file >> $(OUTFILE); \
 		echo "\n\n" >> $(OUTFILE); \
 	done
@@ -58,6 +41,22 @@ bundle-with-tests:
 	echo "\n\n" >> $(OUTFILE_TESTS)
 	@echo "Bundling with UnitTests.lua complete."
 
+# First target: Perform both Lua installation and bundling
+.PHONY: all
+all: $(LUA_BINARY) bundle bundle-with-tests
+
+# Target to build Lua only if the binary doesn't exist
+$(LUA_BINARY):
+	@if [ ! -f $(LUA_BINARY) ]; then \
+		echo "Building Lua from source..."; \
+		curl -L $(LUA_URL) | tar -xz; \
+		cd $(LUA_SRC_DIR) && make all test && cp src/lua ../$(LUA_BINARY); \
+		cd .. && rm -rf $(LUA_SRC_DIR); \
+		echo "Lua binary is ready."; \
+	else \
+		echo "Lua binary already exists, skipping build."; \
+	fi
+
 # Target to clean up Lua source directory and binary
 .PHONY: clean-lua
 clean-lua:
@@ -67,3 +66,8 @@ clean-lua:
 .PHONY: clean
 clean:
 	rm -rf $(OUT_DIR)
+
+# Target to clean all
+.PHONY: clean-all
+clean-all: clean clean-lua
+

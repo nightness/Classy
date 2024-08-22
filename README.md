@@ -53,6 +53,13 @@ Removes the output directory and bundled files.
 
 - **Usage**: `make clean`
 
+#### `clean-all`
+
+Cleans both the bundled files and lua binary.
+
+- **Usage**: `make clean-all`
+
+
 ### Usage Summary
 
 1. **Build Lua and create both bundles**: Run `make` or `make all`.
@@ -60,6 +67,7 @@ Removes the output directory and bundled files.
 3. **Bundle with tests**: Run `make bundle-with-tests`.
 4. **Clean Lua build**: Run `make clean-lua`.
 5. **Clean bundled files**: Run `make clean`.
+6. **Clean all files**: Run `make clean-all`.
 
 ## Classes
 - [Array](#array)
