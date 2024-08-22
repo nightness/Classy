@@ -95,5 +95,10 @@ Classy.DataSet = {
             end
             return result
         end,
+
+        -- Clears the dataset by removing all values
+        clear = function(self)
+            self._data = {}
+        end,
     })
 }
