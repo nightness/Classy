@@ -69,22 +69,23 @@ end
 -- there are other ways to do this, but this way looks nice and works great. It's the core of Classy.
 --
 function Classy.createInstance(classProtoType, initializer, existingData)
-    local object, lookup_table = _copy(classProtoType);
-    if (existingData) then
-        object = tableMerge(object, existingData);
+    local object = {}
+    setmetatable(object, { __index = classProtoType })
+
+    if existingData then
+        tableMerge(object, existingData)
     end
-    if (initializer and type(initializer) == "function") then
-        if (object.constructor and type(object.constructor) == "function") then
-            object:constructor(); -- base constructor
+
+    if initializer and type(initializer) == "function" then
+        if classProtoType.constructor and type(classProtoType.constructor) == "function" then
+            classProtoType.constructor(object)
         end
-        object.constructor = initializer; -- set the constructor
+        initializer(object)
+    elseif classProtoType.constructor and type(classProtoType.constructor) == "function" then
+        classProtoType.constructor(object)
     end
-    if (object.constructor and type(object.constructor) == "function") then
-        object:constructor(); -- class constructor
-        object.constructor = nil; -- single call only
-    end
-    object.new = nil; -- clear instancing method from the instanced object
-    return object;
+
+    return object
 end
 
 --

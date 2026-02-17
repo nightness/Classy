@@ -1289,6 +1289,22 @@ function TestClassyCore:testGetClassName()
     lu.assertEquals(Classy.getClassName(ht), "Classy.Hashtable")
 end
 
+function TestClassyCore:testMethodSharing()
+    local ht1 = Classy.Hashtable.new()
+    local ht2 = Classy.Hashtable.new()
+    lu.assertIs(ht1.put, ht2.put)
+    lu.assertIs(ht1.get, ht2.get)
+    ht1:put("a", 1)
+    lu.assertNil(ht2:get("a"))
+end
+
+function TestClassyCore:testDataIndependence()
+    local list1 = Classy.List.new()
+    local list2 = Classy.List.new()
+    list1:add(42)
+    lu.assertEquals(list2:length(), 0)
+end
+
 function TestClassyCore:testClassFactory()
     local Example = Classy.Class({
         constructor = function(self)
@@ -1379,7 +1395,6 @@ Classy.Test = {
         constructor = function(self)
             if self.base then
                 self:base()
-                self.base = nil
             end
             self._className = "Classy.Test"
         end
