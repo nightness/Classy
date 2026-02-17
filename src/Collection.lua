@@ -59,6 +59,11 @@ Classy.Collection = {
             return value                             -- Return the removed value
         end,
 
+        -- Returns the value at the given index
+        get = function(self, index)
+            return self.data[index]
+        end,
+
         -- Checks if two collections are equal by comparing their contents
         equals = function(self, otherCollection)
             if self == otherCollection then

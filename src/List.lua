@@ -12,7 +12,7 @@ Classy.List = {
             self._data[#self._data + 1] = value;
         end,
         merge = function(self, list)
-            if (Classy.getClassName(list) == self._className or (type(list) == "table" and #list)) then
+            if type(list) == "table" and type(list.forEach) == "function" then
                 list:forEach(function (value)
                     self:add(value);
                 end)

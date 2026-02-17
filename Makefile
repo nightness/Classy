@@ -10,6 +10,7 @@ OUTFILE = $(OUT_DIR)/classy.bundle.lua
 OUTFILE_TESTS = $(OUT_DIR)/classy.bundle.tests.lua
 OUTFILE_NEURAL = $(OUT_DIR)/neural-network.lua
 FILES = src/Init.lua src/Array.lua src/BinaryTree.lua src/Collection.lua src/DataSet.lua src/Field.lua src/Hashtable.lua src/List.lua src/LinkedList.lua src/Math.lua src/Matrix.lua src/Observable.lua src/Queue.lua src/Stack.lua src/Tree.lua src/Vector.lua
+LUAUNIT = src/luaunit.lua
 UNIT_TESTS = src/UnitTests.lua
 NEURAL_NETWORK = src/NeuralNetwork/NeuralNetwork.lua
 LUA_BINARY = lua
@@ -40,6 +41,10 @@ bundle-with-tests:
 		cat $$file >> $(OUTFILE_TESTS); \
 		echo "\n\n" >> $(OUTFILE_TESTS); \
 	done
+	# Append luaunit.lua wrapped so it sets a global
+	echo "\n-- luaunit start\nlocal function _load_luaunit()\n" >> $(OUTFILE_TESTS)
+	cat $(LUAUNIT) >> $(OUTFILE_TESTS)
+	echo "\nend\nlu = _load_luaunit()\n-- luaunit end\n\n" >> $(OUTFILE_TESTS)
 	# Append UnitTests.lua
 	echo "Appending UnitTests.lua..."
 	cat $(UNIT_TESTS) >> $(OUTFILE_TESTS)

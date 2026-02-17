@@ -53,7 +53,7 @@ function Classy.inheritFrom(src, dest)
     for k,v in pairs(src) do
         if type(v) == "table" then
             if type(dest[k] or false) == "table" then
-                Classy.inheritFrom(dest[k] or {}, src[k] or {})
+                Classy.inheritFrom(src[k], dest[k])
             else
                 dest[k] = v
             end
@@ -61,7 +61,7 @@ function Classy.inheritFrom(src, dest)
             dest[k] = v
         end
     end
-    return dest;    
+    return dest;
 end
 
 --
@@ -116,12 +116,13 @@ function Classy.getClass(className)
     if (type(className) ~= "string") then
         return nil;
     end
-    if (not className:match(".")) then
+    if (not className:match("%.")) then
         return _G[className];
     end
     local split = split_str(className, ".")
     local result = _G[split[1]];
     for i = 2, #split do
+        if result == nil then return nil end
         result = result[split[i]];
     end
     return result;

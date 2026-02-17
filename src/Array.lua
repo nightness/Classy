@@ -38,7 +38,7 @@ Classy.Array = {
     end,
     -- return true if the array contains the specified value
     contains = function(self, value)
-        if (value == nil) then return nil end
+        if (value == nil) then return false end
         local result = false;
         self:forEach(function (v)
             if (not result and v == value) then

@@ -2,3 +2,6 @@ out/
 
 # The interpreter
 lua
+
+# Cache files
+.fastembed_cache

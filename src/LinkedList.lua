@@ -128,6 +128,15 @@ Classy.LinkedList.prototype = {
         self._lastRef = nil
     end,
 
+    forEach = function(self, callback)
+        local node = self._firstNode
+        if not node then return end
+        repeat
+            callback(node)
+            node = node.nextNode
+        until node == self._firstNode
+    end,
+
     insertAfter = function(self, refNode, value)
         local node = Classy.LinkedList.Node.new(value)
         
@@ -158,7 +167,27 @@ Classy.LinkedList.prototype = {
         return node
     end,
 
+    length = function(self)
+        local count = 0
+        self:forEach(function() count = count + 1 end)
+        return count
+    end,
+
+    clear = function(self)
+        self._firstNode = nil
+        self._lastRef = nil
+    end,
+
+    toTable = function(self)
+        local result = {}
+        self:forEach(function(node)
+            table.insert(result, node:get())
+        end)
+        return result
+    end,
+
     insertBefore = function(self, refNode, value)
+        if not refNode then return self:insertAfter(nil, value) end
         return self:insertAfter(refNode.previousNode, value)
     end,
 

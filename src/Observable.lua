@@ -39,8 +39,8 @@ Classy.Observable = {
         end,
 
         -- Default error handler for listener invocation errors
-        invokeErrorHandler = function(err)
-            addon.Debug("Observable invoke error: " .. tostring(err))
+        invokeErrorHandler = function(self, err)
+            print("Observable invoke error: " .. tostring(err))
         end,
 
         -- Invokes all subscribed listeners when the value changes

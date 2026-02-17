@@ -33,8 +33,8 @@ Classy.NeuralNetwork.Neuron = {
             return self._output
         end,
 
-        adjustWeights = function(self, error)
-            if error == nil then
+        adjustWeights = function(self, err)
+            if err == nil then
                 error("adjustWeights: Error is nil!")
             end
 
@@ -43,9 +43,9 @@ Classy.NeuralNetwork.Neuron = {
                 if not self._weights[i] then
                     self._weights[i] = math.random() * 0.1 - 0.05
                 end
-                self._weights[i] = self._weights[i] + learningRate * error * input:getOutput()
+                self._weights[i] = self._weights[i] + learningRate * err * input:getOutput()
             end
-            self._bias = self._bias + learningRate * error
+            self._bias = self._bias + learningRate * err
         end,
 
         computeDelta = function(self)
@@ -243,7 +243,7 @@ function xorTest()
     end
 end
 
-xorTest()
+-- xorTest()
 
 function testNeuralNetwork()
     print("Creating neural network...")

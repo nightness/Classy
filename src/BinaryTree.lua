@@ -119,6 +119,48 @@ Classy.BinaryTree.prototype = {
         return findRecursively(self._root, value)
     end,
 
+    -- Delete a value from the BinaryTree (Binary Search Tree deletion)
+    delete = function(self, value)
+        local function findMin(node)
+            while node:getLeft() ~= nil do
+                node = node:getLeft()
+            end
+            return node
+        end
+
+        local function deleteRecursively(node, value)
+            if node == nil then return nil end
+
+            if value < node:getValue() then
+                node._leftChild = deleteRecursively(node:getLeft(), value)
+                return node
+            elseif value > node:getValue() then
+                node._rightChild = deleteRecursively(node:getRight(), value)
+                return node
+            else
+                -- Node found
+                -- Case 1: Leaf node
+                if node:getLeft() == nil and node:getRight() == nil then
+                    return nil
+                end
+                -- Case 2: One child
+                if node:getLeft() == nil then
+                    return node:getRight()
+                end
+                if node:getRight() == nil then
+                    return node:getLeft()
+                end
+                -- Case 3: Two children - replace with in-order successor
+                local successor = findMin(node:getRight())
+                node._value = Classy.Observable.new(successor:getValue())
+                node._rightChild = deleteRecursively(node:getRight(), successor:getValue())
+                return node
+            end
+        end
+
+        self._root = deleteRecursively(self._root, value)
+    end,
+
     -- Traversal: In-order (left, root, right)
     inOrderTraversal = function(self, visit)
         local function inOrder(node)

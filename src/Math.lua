@@ -8,7 +8,7 @@ Classy.Math = {
     end,
     -- Sigmoid activation function
     sigmoid = function(number)        
-        return 1.0 / (1.0 + math.pow(Classy.Math.e(), -number))
+        return 1.0 / (1.0 + Classy.Math.e() ^ (-number))
     end,
     round = function (num, n)
         local mult = 10^(n or 0)

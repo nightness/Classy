@@ -48,11 +48,10 @@ Classy.Hashtable = {
 
         -- Checks if a given value exists in the hashtable
         containsValue = function(self, value)
-            local result = false
-            self:forEach(function(_, v)
-                if v == value then result = true end
-            end)
-            return result
+            for _, v in pairs(self._data) do
+                if v == value then return true end
+            end
+            return false
         end,
 
         -- Removes a key-value pair from the hashtable by key
@@ -86,7 +85,9 @@ Classy.Hashtable = {
             if type(key) ~= "string" then
                 error("Classy.Hashtable.get: Key argument requires a string value")
             end
-            return self._data[key] or default
+            local v = self._data[key]
+            if v ~= nil then return v end
+            return default
         end,
 
         -- Returns a Classy.List of all keys in the hashtable, optionally sorted
@@ -128,13 +129,12 @@ Classy.Hashtable = {
             end
 
             -- Compare key-value pairs in both hashtables
-            local result = true
-            self:forEach(function(key, value)
+            for key, value in pairs(self._data) do
                 if otherHashtable:get(key) ~= value then
-                    result = false
+                    return false
                 end
-            end)
-            return result
+            end
+            return true
         end,
 
         -- Iterates over each key-value pair in the hashtable, applying the given function

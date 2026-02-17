@@ -30,6 +30,7 @@ Classy.Matrix = {
 
         -- Adds another matrix to the current matrix
         add = function(self, matrix)
+            if #self._data == 0 then error("Classy.Matrix.add: Matrix is empty") end
             -- Ensure the matrices have the same dimensions
             local rows, cols = #self._data, #self._data[1]
             if rows ~= #matrix._data or cols ~= #matrix._data[1] then
@@ -48,6 +49,7 @@ Classy.Matrix = {
 
         -- Subtracts another matrix from the current matrix
         subtract = function(self, matrix)
+            if #self._data == 0 then error("Classy.Matrix.subtract: Matrix is empty") end
             -- Ensure the matrices have the same dimensions
             local rows, cols = #self._data, #self._data[1]
             if rows ~= #matrix._data or cols ~= #matrix._data[1] then
@@ -66,6 +68,7 @@ Classy.Matrix = {
 
         -- Multiplies the current matrix by another matrix or a scalar
         multiply = function(self, matrixOrScalar)
+            if #self._data == 0 then error("Classy.Matrix.multiply: Matrix is empty") end
             local result
 
             if type(matrixOrScalar) == "number" then
@@ -104,6 +107,7 @@ Classy.Matrix = {
 
         -- Transposes the current matrix
         transpose = function(self)
+            if #self._data == 0 then error("Classy.Matrix.transpose: Matrix is empty") end
             local rows, cols = #self._data, #self._data[1]
             local result = Classy.Matrix.new(cols, rows)
 
@@ -122,6 +126,9 @@ Classy.Matrix = {
             if rows ~= cols then
                 error("Classy.Matrix.determinant: Determinant can only be calculated for square matrices")
             end
+
+            -- Base case for 1x1 matrix
+            if rows == 1 then return self._data[1][1] end
 
             -- Base case for 2x2 matrix
             if rows == 2 then
@@ -187,6 +194,7 @@ Classy.Matrix = {
 
         -- Returns a string representation of the matrix for easy visualization
         toString = function(self)
+            if #self._data == 0 then return "" end
             local rows, cols = #self._data, #self._data[1]
             local str = ""
 

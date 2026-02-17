@@ -86,9 +86,9 @@ Classy.Tree = {
             local function dfs(node)
                 visit(node)
                 local children = node:get()
-                for _, child in ipairs(children) do
-                    dfs(child)
-                end
+                children:forEach(function(childNode)
+                    dfs(childNode:get())
+                end)
             end
             dfs(self._root)
         end,
@@ -102,9 +102,9 @@ Classy.Tree = {
                 local node = queue:dequeue()
                 visit(node)
                 local children = node:get()
-                for _, child in ipairs(children) do
-                    queue:enqueue(child)
-                end
+                children:forEach(function(childNode)
+                    queue:enqueue(childNode:get())
+                end)
             end
         end,
     },
